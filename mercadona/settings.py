@@ -31,9 +31,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['https://mercadonastudi-c95dd55a3900.herokuapp.com']
 
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://mercadonastudi-c95dd55a3900.herokuapp.com',
-]
+CSRF_TRUSTED_ORIGINS = ['https://mercadonastudi-c95dd55a3900.herokuapp.com']
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,8 +49,6 @@ INSTALLED_APPS = [
     'django_filters',
     'django_extensions',
 ]
-
-CSRF_COOKIE_SECURE = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
