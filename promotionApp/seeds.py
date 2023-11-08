@@ -1,6 +1,13 @@
-from django.db import transaction
+import os
+import django
 from promotionApp.models import Product, Category, Promotion
 from djmoney.money import Money
+from django.utils import timezone
+from datetime import timedelta
+from django.db import transaction
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mercadona.settings")
+django.setup()
 
 @transaction.atomic
 def run():
