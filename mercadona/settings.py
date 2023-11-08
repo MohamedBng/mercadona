@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django_extensions',
 ]
 
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
