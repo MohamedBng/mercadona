@@ -59,10 +59,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'https://mercadonastudi-c95dd55a3900.herokuapp.com',
-]
+CORS_ALLOWED_ORIGINS = ['*']
 
 ROOT_URLCONF = 'mercadona.urls'
 
