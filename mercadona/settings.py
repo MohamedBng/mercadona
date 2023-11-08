@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m((uy-@orl8p2eh$gpz$)-vh8wn@k@5d$7n()%38gtr!@h#=oz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://mercadonastudi-c95dd55a3900.herokuapp.com']
 
 
 # Application definition
@@ -59,7 +59,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = ['*']
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'https://mercadonastudi-c95dd55a3900.herokuapp.com',
+]
 
 ROOT_URLCONF = 'mercadona.urls'
 
