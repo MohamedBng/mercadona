@@ -33,3 +33,6 @@ def run():
         products_in_category = Product.objects.filter(category=category_instance)[:2]
         for prod in products_in_category:
             Promotion.objects.create(start_date=timezone.now().date(), end_date=timezone.now().date() + timedelta(days=10), discount_percentage=10, product=prod)
+
+if __name__ == '__main__':
+    run()
