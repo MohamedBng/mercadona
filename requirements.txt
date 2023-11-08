@@ -12,11 +12,13 @@ click-repl==0.3.0
 coverage==7.2.7
 cron-descriptor==1.4.0
 distlib==0.3.7
+dj-database-url==2.1.0
 Django==4.2
 django-cors-headers==4.2.0
 django-debug-toolbar==4.0.0
 django-extensions==3.2.3
 django-filter @ git+https://github.com/carltongibson/django-filter.git@f38dcdd32d20095cb823cbd5e85946510f146e29
+django-heroku==0.3.1
 django-money==3.2.0
 django-timezone-field==5.1
 djangorestframework==3.14.0
@@ -67,3 +69,4 @@ vine==5.0.0
 virtualenv==20.24.0
 virtualenv-clone==0.5.7
 wcwidth==0.2.6
+whitenoise==6.6.0
