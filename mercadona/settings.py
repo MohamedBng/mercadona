@@ -28,11 +28,13 @@ SECRET_KEY = 'django-insecure-m((uy-@orl8p2eh$gpz$)-vh8wn@k@5d$7n()%38gtr!@h#=oz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://mercadonastudi-c95dd55a3900.herokuapp.com']
 
 
-# Application definition
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://mercadonastudi-c95dd55a3900.herokuapp.com
+    '
+]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
