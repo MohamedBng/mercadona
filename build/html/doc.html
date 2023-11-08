@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html lang="fr" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API Section &#8212; Documentation Mercadona 0.1</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=af8511e3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=d99ca74e"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="api-section">
+<span id="id1"></span><h1>API Section<a class="headerlink" href="#api-section" title="Link to this heading">¶</a></h1>
+<p>Ce document décrit les vues API disponibles dans votre projet Django.</p>
+<section id="promotionlist-api-view">
+<h2>PromotionList API View<a class="headerlink" href="#promotionlist-api-view" title="Link to this heading">¶</a></h2>
+</section>
+<section id="categorylist-api-view">
+<h2>CategoryList API View<a class="headerlink" href="#categorylist-api-view" title="Link to this heading">¶</a></h2>
+</section>
+<section id="productlist-api-view">
+<h2>ProductList API View<a class="headerlink" href="#productlist-api-view" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+<section id="modeles-de-donnees">
+<span id="id2"></span><span id="model-section"></span><h1>Modèles de Données<a class="headerlink" href="#modeles-de-donnees" title="Link to this heading">¶</a></h1>
+<p>Ce document décrit les modèles de données utilisés dans votre projet Django.</p>
+<section id="category-model">
+<h2>Category Model<a class="headerlink" href="#category-model" title="Link to this heading">¶</a></h2>
+</section>
+<section id="product-model">
+<h2>Product Model<a class="headerlink" href="#product-model" title="Link to this heading">¶</a></h2>
+</section>
+<section id="promotion-model">
+<h2>Promotion Model<a class="headerlink" href="#promotion-model" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+<section id="composants-react">
+<span id="react-section"></span><h1>Composants React<a class="headerlink" href="#composants-react" title="Link to this heading">¶</a></h1>
+<p>Ce document décrit les composants React utilisés dans votre projet.</p>
+<section id="app-component">
+<h2>App Component<a class="headerlink" href="#app-component" title="Link to this heading">¶</a></h2>
+<div class="highlight-jsx notranslate"><div class="highlight"><pre><span></span>import React from &#39;react&#39;;
+import Catalogue from &#39;./components/catalogue&#39;;
+import &#39;bootstrap/dist/css/bootstrap.css&#39;;
+
+const App = () =&gt; {
+  return (
+    &lt;div&gt;
+      &lt;Catalogue /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default App;
+</pre></div>
+</div>
+</section>
+<section id="catalogue-component">
+<h2>Catalogue Component<a class="headerlink" href="#catalogue-component" title="Link to this heading">¶</a></h2>
+<div class="highlight-jsx notranslate"><div class="highlight"><pre><span></span>import React, { useEffect, useState } from &#39;react&#39;;
+import axios from &#39;axios&#39;;
+import &#39;./catalogue.css&#39;;
+import Card from &#39;react-bootstrap/Card&#39;;
+import Pagination from &#39;react-bootstrap/Pagination&#39;;
+
+const Catalogue = () =&gt; {
+  const [products, setProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(&#39;&#39;);
+  const [showPromotions, setShowPromotions] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [previousPage, setPreviousPage] = useState(null);
+  const [nextPage, setNextPage] = useState(null);
+
+  useEffect(() =&gt; {
+    const fetchCategories = async () =&gt; {
+      try {
+        const response = await axios.get(&#39;http://localhost:8000/api/categories/&#39;);
+        setCategories(response.data.results);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() =&gt; {
+    const fetchProducts = async () =&gt; {
+      try {
+        let apiUrl = &#39;http://localhost:8000/api/products/&#39;;
+        const params = {};
+
+        if (selectedCategory !== &#39;&#39;) {
+          params.category = selectedCategory;
+        }
+        if (showPromotions) {
+          params.promotion = true;
+        }
+        params.page = page;
+
+        const response = await axios.get(apiUrl, { params });
+        setProducts(response.data.results);
+
+        setPreviousPage(response.data.previous);
+        setNextPage(response.data.next);
+
+        // Débogage de la pagination
+        console.log(&#39;Page actuelle:&#39;, page);
+        console.log(&#39;Nombre total de pages:&#39;, response.data.total_pages);
+
+        setTotalPages(response.data.total_pages);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProducts();
+  }, [selectedCategory, showPromotions, page]);
+
+  const handlePageChange = (newPage) =&gt; {
+    setPage(newPage);
+  };
+
+  return (
+    &lt;div className=&quot;container&quot;&gt;
+      &lt;h1&gt;Catalogue&lt;/h1&gt;
+      &lt;div&gt;
+        &lt;label&gt;Filtrer par catégorie:&lt;/label&gt;
+        &lt;select
+          value={selectedCategory}
+          onChange={(e) =&gt; setSelectedCategory(e.target.value)}
+        &gt;
+          &lt;option value=&quot;&quot;&gt;Toutes les catégories&lt;/option&gt;
+          {categories.map((category) =&gt; (
+            &lt;option key={category.id} value={category.id}&gt;
+              {category.label}
+            &lt;/option&gt;
+          ))}
+        &lt;/select&gt;
+      &lt;/div&gt;
+      {/* ... */}
+    &lt;/div&gt;
+  );
+};
+
+export default Catalogue;
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Mercadona</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Recherche rapide</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Mohamed Bengrich.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

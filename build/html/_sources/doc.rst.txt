@@ -1,0 +1,187 @@
+.. _api-section:
+
+API Section
+===========
+
+Ce document décrit les vues API disponibles dans votre projet Django.
+
+PromotionList API View
+----------------------
+
+.. automodule:: promotionApp.api.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+CategoryList API View
+----------------------
+
+.. automodule:: promotionApp.api.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+ProductList API View
+--------------------
+
+.. automodule:: myapromotionApppp.api.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+.. _model-section:
+
+.. _model-section:
+
+Modèles de Données
+==================
+
+Ce document décrit les modèles de données utilisés dans votre projet Django.
+
+Category Model
+--------------
+
+.. automodule:: promotionApp.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Product Model
+-------------
+
+.. automodule:: promotionApp.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Promotion Model
+---------------
+
+.. automodule:: promotionApp.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+
+.. _react-section:
+
+Composants React
+===============
+
+Ce document décrit les composants React utilisés dans votre projet.
+
+App Component
+-------------
+
+.. code-block:: jsx
+
+   import React from 'react';
+   import Catalogue from './components/catalogue';
+   import 'bootstrap/dist/css/bootstrap.css';
+
+   const App = () => {
+     return (
+       <div>
+         <Catalogue />
+       </div>
+     );
+   };
+
+   export default App;
+
+Catalogue Component
+-------------------
+
+.. code-block:: jsx
+
+   import React, { useEffect, useState } from 'react';
+   import axios from 'axios';
+   import './catalogue.css';
+   import Card from 'react-bootstrap/Card';
+   import Pagination from 'react-bootstrap/Pagination';
+
+   const Catalogue = () => {
+     const [products, setProducts] = useState([]);
+     const [selectedCategory, setSelectedCategory] = useState('');
+     const [showPromotions, setShowPromotions] = useState(false);
+     const [categories, setCategories] = useState([]);
+     const [page, setPage] = useState(1);
+     const [totalPages, setTotalPages] = useState(1);
+     const [previousPage, setPreviousPage] = useState(null);
+     const [nextPage, setNextPage] = useState(null);
+
+     useEffect(() => {
+       const fetchCategories = async () => {
+         try {
+           const response = await axios.get('http://localhost:8000/api/categories/');
+           setCategories(response.data.results);
+         } catch (error) {
+           console.error(error);
+         }
+       };
+
+       fetchCategories();
+     }, []);
+
+     useEffect(() => {
+       const fetchProducts = async () => {
+         try {
+           let apiUrl = 'http://localhost:8000/api/products/';
+           const params = {};
+
+           if (selectedCategory !== '') {
+             params.category = selectedCategory;
+           }
+           if (showPromotions) {
+             params.promotion = true;
+           }
+           params.page = page;
+
+           const response = await axios.get(apiUrl, { params });
+           setProducts(response.data.results);
+
+           setPreviousPage(response.data.previous);
+           setNextPage(response.data.next);
+
+           // Débogage de la pagination
+           console.log('Page actuelle:', page);
+           console.log('Nombre total de pages:', response.data.total_pages);
+
+           setTotalPages(response.data.total_pages);
+         } catch (error) {
+           console.error(error);
+         }
+       };
+
+       fetchProducts();
+     }, [selectedCategory, showPromotions, page]);
+
+     const handlePageChange = (newPage) => {
+       setPage(newPage);
+     };
+
+     return (
+       <div className="container">
+         <h1>Catalogue</h1>
+         <div>
+           <label>Filtrer par catégorie:</label>
+           <select
+             value={selectedCategory}
+             onChange={(e) => setSelectedCategory(e.target.value)}
+           >
+             <option value="">Toutes les catégories</option>
+             {categories.map((category) => (
+               <option key={category.id} value={category.id}>
+                 {category.label}
+               </option>
+             ))}
+           </select>
+         </div>
+         {/* ... */}
+       </div>
+     );
+   };
+
+   export default Catalogue;
