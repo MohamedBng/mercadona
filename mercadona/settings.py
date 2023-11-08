@@ -150,15 +150,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 6,  # Définissez le nombre d'éléments par page sur 30
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
-CELERY_BEAT_SCHEDULE = {
-    'delete-expired-promotions': {
-        'task': 'promotionApp.tasks.delete_expired_promotions',
-        'schedule': 60.0,
-    },
-}
-
 GRAPH_MODELS = {
     'all_applications': True,
     'group_models': True,
