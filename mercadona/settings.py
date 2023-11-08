@@ -32,8 +32,7 @@ ALLOWED_HOSTS = ['https://mercadonastudi-c95dd55a3900.herokuapp.com']
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://mercadonastudi-c95dd55a3900.herokuapp.com
-    '
+    'https://mercadonastudi-c95dd55a3900.herokuapp.com',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
