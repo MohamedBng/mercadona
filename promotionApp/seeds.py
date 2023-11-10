@@ -27,12 +27,29 @@ def run():
         'Nettoyage de la maison': ['Détergent', 'Nettoyant sol', 'Liquide vaisselle', 'Spray nettoyant', 'Eponge']
     }
 
-    for cat, prods in products_data.items():
-        category_instance = Category.objects.get(label=cat)
-        print(f"Traitement de la catégorie : {cat}")
-        for prod in prods:
-            Product.objects.create(label=prod, description=f"Description pour {prod}", price=Money(10, 'EUR'), category=category_instance, image=f"seed_images/{prod}.jpg")
-            print(f"Produit créé : {prod} dans la catégorie {cat}")
+for cat, prods in products_data.items():
+    category_instance = Category.objects.get(label=cat)
+    print(f"Traitement de la catégorie : {cat}")
+    for prod in prods:
+        image_path = os.path.join('/app/promotionApp/_static/seed_images', f"{prod}.jpg")
+
+        if os.path.exists(image_path):
+            with open(image_path, 'rb') as img_file:
+                product_image = File(img_file)
+                product, created = Product.objects.get_or_create(
+                    label=prod,
+                    defaults={
+                        'description': f"Description pour {prod}",
+                        'price': Money(10, 'EUR'),
+                        'category': category_instance,
+                        'image': product_image
+                    }
+                )
+                if created:
+                    print(f"Produit créé : {prod} avec l'image {product_image.name} dans la catégorie {cat}")
+        else:
+            print(f"L'image pour {prod} n'existe pas à l'emplacement attendu et a été ignorée.")
+
 
     for cat in categories_data:
         category_instance = Category.objects.get(label=cat)
