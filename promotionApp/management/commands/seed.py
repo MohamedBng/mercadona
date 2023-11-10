@@ -1,16 +1,18 @@
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from promotionApp.models import Product, Category, Promotion
 from djmoney.money import Money
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
+import os
 
 class Command(BaseCommand):
-    help = 'Seeds the database with initial data'
+    help = "Seeds the database with initial data"
 
     def handle(self, *args, **kwargs):
         # Catégories
         categories_data = ['Aliments frais', 'Aliments emballés', 'Boissons', 'Produits de beauté et d\'hygiène', 'Nettoyage de la maison']
-        
         for cat in categories_data:
             Category.objects.get_or_create(label=cat)
 
@@ -22,30 +24,23 @@ class Command(BaseCommand):
             'Nettoyage de la maison': ['Détergent', 'Nettoyant sol', 'Liquide vaisselle', 'Spray nettoyant', 'Eponge']
         }
 
-        default_image_path = 'muffin-g989da0f83_640_v9CY5WK.jpg'
-
         for cat, prods in products_data.items():
-            category_instance = Category.objects.get(label=cat)
+            category_instance, created = Category.objects.get_or_create(label=cat)
             for prod in prods:
-                Product.objects.get_or_create(
-                    label=prod,
-                    defaults={
-                        'description': f"Description pour {prod}",
-                        'price': Money(10, 'EUR'),
-                        'category': category_instance,
-                        'image': f"{prod}.jpg"
-                    }
-                )
+                product_image_path = os.path.join(settings.BASE_DIR, 'promotionApp/static/seed_images', f"{prod}.jpg")
+                if os.path.exists(product_image_path):
+                    with open(product_image_path, 'rb') as image_file:
+                        product_image = File(image_file)
+                        product, created = Product.objects.get_or_create(
+                            label=prod,
+                            defaults={
+                                'description': f"Description pour {prod}",
+                                'price': Money(10, 'EUR'),
+                                'category': category_instance,
+                                'image': product_image
+                            }
+                        )
+                else:
+                    self.stdout.write(self.style.WARNING(f"L'image pour le produit {prod} n'existe pas et est ignorée."))
 
-        for cat in categories_data:
-            category_instance = Category.objects.get(label=cat)
-            products_in_category = Product.objects.filter(category=category_instance)[:2]
-            for prod in products_in_category:
-                Promotion.objects.get_or_create(
-                    product=prod,
-                    defaults={
-                        'start_date': timezone.now().date(),
-                        'end_date': timezone.now().date() + timedelta(days=10),
-                        'discount_percentage': 10
-                    }
-                )
+        self.stdout.write(self.style.SUCCESS('La base de données a été alimentée avec succès.'))
