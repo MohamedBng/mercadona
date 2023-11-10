@@ -20,3 +20,8 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'label', 'description', 'price_currency', 'price', 'image_url', 'category', 'active_promotion')
+
+    def get_image_url(self, obj):
+    if obj.image:
+        return obj.image.url
+    return None
