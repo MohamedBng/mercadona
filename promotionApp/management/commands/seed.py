@@ -44,3 +44,17 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.WARNING(f"L'image pour le produit {prod} n'existe pas et est ignorée."))
 
         self.stdout.write(self.style.SUCCESS('La base de données a été alimentée avec succès.'))
+
+
+        for cat in categories_data:
+            category_instance = Category.objects.get(label=cat)
+            products_in_category = Product.objects.filter(category=category_instance)[:2]
+            for prod in products_in_category:
+                Promotion.objects.get_or_create(
+                    product=prod,
+                    defaults={
+                        'start_date': timezone.now().date(),
+                        'end_date': timezone.now().date() + timedelta(days=10),
+                        'discount_percentage': 10
+                    }
+                )
