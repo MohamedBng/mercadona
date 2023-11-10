@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from .models import Product
-from .models import Category
-from .models import Promotion
+from .models import Product, Category, Promotion
 
 class PromotionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +20,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('id', 'label', 'description', 'price_currency', 'price', 'image_url', 'category', 'active_promotion')
 
     def get_image_url(self, obj):
-    if obj.image:
-        return obj.image.url
-    return None
+        if obj.image:
+            return obj.image.url
+        return None
