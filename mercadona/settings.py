@@ -62,7 +62,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'https://mohamedbng.github.io',
     'https://mercadonastudi-c95dd55a3900.herokuapp.com',
 ]
 
