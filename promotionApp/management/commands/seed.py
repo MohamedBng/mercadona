@@ -27,7 +27,7 @@ class Command(BaseCommand):
         for cat, prods in products_data.items():
             category_instance, created = Category.objects.get_or_create(label=cat)
             for prod in prods:
-                product_image_path = os.path.join(settings.BASE_DIR, 'promotionApp/static/seed_images', f"{prod}.jpg")
+                product_image_path = os.path.join('/app/promotionApp/_static/seed_images', f"{prod}.jpg")
                 if os.path.exists(product_image_path):
                     with open(product_image_path, 'rb') as image_file:
                         product_image = File(image_file)
