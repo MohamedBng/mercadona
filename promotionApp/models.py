@@ -50,17 +50,17 @@ class Product(models.Model):
     label = models.CharField(max_length=255)
     description = models.TextField()
     price = MoneyField(max_digits=4, decimal_places=2, default_currency='EUR')
-    image = models.ImageField(validators=[_validate_image_size, _validate_image_extension])
+    image = models.ImageField(
+        upload_to='product_images/',
+        validators=[_validate_image_size, _validate_image_extension]
+    )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    # Propriété calculée pour obtenir l'URL de l'image
     @property
     def image_url(self):
-        if self.image:
-            url = f"http://localhost:3000/images/{os.path.basename(self.image.name)}"
-            print(f"Image URL: {url}")  # Ajoutez cette ligne pour le débogage
-            return url
-        return ''
+            if self.image:
+                return self.image.url
+            return ''  
 
     def clean(self):
         required_fields = {

@@ -14,8 +14,9 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
     active_promotion = PromotionSerializer(source='get_active_promotion', read_only=True)
     
     class Meta:
         model = Product
-        fields = ('id', 'label', 'description', 'price_currency', 'price', 'image', 'category', 'active_promotion')
+        fields = ('id', 'label', 'description', 'price_currency', 'price', 'image_url', 'category', 'active_promotion')
