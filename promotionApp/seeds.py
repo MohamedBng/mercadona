@@ -31,8 +31,8 @@ def run():
         category_instance = Category.objects.get(label=cat)
         print(f"Traitement de la catégorie : {cat}")
         for prod in prods:
-            
-            image_path = os.path.join('promotionApp/static/seed_images', f"{prod}.jpg") 
+
+            image_path = os.path.join('promotionApp/_static/seed_images', f"{prod}.jpg") 
             if os.path.exists(image_path): # vérifiez l'existence de l'image
                 with open(image_path, 'rb') as img_file:
                     product_image = File(img_file)
