@@ -31,7 +31,7 @@ def run():
         category_instance = Category.objects.get(label=cat)
         print(f"Traitement de la catégorie : {cat}")
         for prod in prods:
-            Product.objects.create(label=prod, description=f"Description pour {prod}", price=Money(10, 'EUR'), category=category_instance, image=f"{prod}.jpg")
+            Product.objects.create(label=prod, description=f"Description pour {prod}", price=Money(10, 'EUR'), category=category_instance, image=f"seed_images/{prod}.jpg")
             print(f"Produit créé : {prod} dans la catégorie {cat}")
 
     for cat in categories_data:
